@@ -1,1 +1,3 @@
-to be edited soon...
+
+export { default as Products } from './Products/Products';
+

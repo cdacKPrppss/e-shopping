@@ -10,7 +10,7 @@ public class EshoppingApp {
 		// TODO Auto-generated method stub
 		SpringApplication.run(EshoppingApp.class, args);
 		
-		System.out.println("Let's begin...");
+//		System.out.println("Let's begin...");
 	}
 	
 }

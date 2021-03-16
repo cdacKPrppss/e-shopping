@@ -19,10 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-
+import eshopping.messages.ResponseCart;
+import eshopping.messages.ResponseCartList;
 import eshopping.messages.ResponseProduct;
 import eshopping.messages.ResponseMessage;
+import eshopping.models.Cart;
+import eshopping.models.CartList;
 import eshopping.models.Product;
+import eshopping.services.CartServiceInf;
 import eshopping.services.ProductServiceInf;
 
 
@@ -69,6 +73,31 @@ public class Controller {
 	    		  
 	    return ResponseEntity.status(HttpStatus.OK).body(files);
 	  }
-
+	
+	  @GetMapping("/Fullcart")
+	  public  ResponseEntity<ResponseCart> getfullCart() {
+		 
+		 ResponseCart responsecart = cartServiceInf.getCart();
+		 
+		 return ResponseEntity.status(HttpStatus.OK).body(responsecart);
+		    
+	  } 
+	  
+	  
+	  
+	  @GetMapping("/addtocart")
+	  public  ResponseEntity<ResponseCart> addtocart(@RequestParam("x") String cid,@RequestParam("y") int quantity)
+	  {
+		 
+		  boolean msg = cartServiceInf.addtocart(cid, quantity);
+		  
+		  if(msg) {
+			  		ResponseCart responsecart = cartServiceInf.getCart();
+		 
+			  		return ResponseEntity.status(HttpStatus.OK).body(responsecart);
+		  }
+		  
+		  return null;  
+	  }
 	 
 	}

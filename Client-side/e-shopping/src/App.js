@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import axios from 'axios';
 
 import './App.css';
-import {  Products, Cart } from './components';
+import {  Products, Cart, Checkout } from './components';
 
 
 const App = () => {
@@ -45,7 +45,7 @@ const App = () => {
       
       <Router>
        <div >
-          
+              e-shopping
           <Switch>
   
             <Route exact path="/">
@@ -57,6 +57,10 @@ const App = () => {
                 caart={cart}
                 
               />
+            </Route>
+			
+			 <Route exact path="/checkout">
+              <Checkout caart={cart}  />
             </Route>
   
           </Switch>

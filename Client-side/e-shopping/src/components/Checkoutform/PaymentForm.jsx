@@ -3,13 +3,15 @@ import { Typography, Button, Divider } from '@material-ui/core';
 import { Elements, CardElement, ElementsConsumer } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
+import Review from './Review';
+
 const stripePromise = loadStripe('process.env.REACT_APP_STRIPE_PUBLIC_KEY');
 
 
-const PaymentForm = ({caart, backStep, nextStep}) => {
+const PaymentForm = ({caart, shippingData, backStep, nextStep}) => {
     return (
         <>
-           
+            <Review caart ={ caart } />
             <Divider />
             <Typography variant="h6" gutterBottom style={{ margin: '20px 0' }}>Payment method</Typography>
             <Elements stripe={stripePromise}>

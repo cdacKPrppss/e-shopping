@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import axios from 'axios';
 
 import './App.css';
-import {  Products, Cart, Checkout } from './components';
+import { NavBar, Products, Cart, Checkout } from './components';
 
 
 const App = () => {
@@ -18,15 +18,42 @@ const App = () => {
       })
   }
 
-   const getCart = async () => {
+  const getCart = async () => {
     axios.get('http://localhost:7777/Fullcart')
       .then((response) => {
         setCart(response.data)
       
       })
   }
+  
+      
+    // for post axios request and handle errors
+  //   handleSubmit = event => {
+  //     event.preventDefault();
+  
+  //     let notification = JSON.stringify({
+  //         token: this.state.token,
+  //         title: this.state.title,
+  //         body: this.state.body
+  //     })
+  
+  //     let headers = {
+  //         headers: {
+  //             'Accept': 'application/json',
+  //             'Content-Type': 'application/json'
+  //         }
+  
+  //     }
+  //     axios.post(`http://127.0.0.1:8000/send_push_message/`, notification)
+  //     .then(res => {
+  //         console.log(res);
+  //         console.log(res.data)
+  //     })
+  //     .catch(error => console.log(error));
+  
+  // }
 
-      const handleAddToCart = (productId, quantity) => { 
+    const handleAddToCart = (productId, quantity) => { 
 
         axios.get(`http://localhost:7777/addtocart/?x=${productId}&y=${quantity}`)
          .then((response) => {
@@ -35,17 +62,44 @@ const App = () => {
       })
     };
   
+    const handleUpdateCartQty = (productId, quantity) => { 
+
+      axios.get(`http://localhost:7777/updatecart/?x=${productId}&y=${quantity}`)
+       .then((response) => {
+            setCart(response.data);
+            console.log("updatecart is called");
+    })
+  };
+  
+    const handleRemoveFromCart= (productId) => { 
+
+      axios.get(`http://localhost:7777/removeitem/?x=${productId}`)
+       .then((response) => {
+            setCart(response.data);
+            console.log("removeitem is called");
+    })
+  };
+  
+    const handleEmptyCart= () => { 
+
+      axios.get(`http://localhost:7777/deleteall`)
+       .then((response) => {
+            setCart(response.data);
+            console.log("deleteall is called");
+    })
+  };
+  
   useEffect(() => {
     getProducts();
-    getCart();   
+    getCart();
+
   }, []);
 
   
     return (
-      
-      <Router>
+       <Router>
        <div >
-              e-shopping
+          <NavBar totalItems={cart.totalitems} />
           <Switch>
   
             <Route exact path="/">
@@ -55,12 +109,14 @@ const App = () => {
             <Route exact path="/Fullcart">
               <Cart
                 caart={cart}
-                
+                handleUpdateCartQty={handleUpdateCartQty}
+                handleRemoveFromCart={handleRemoveFromCart}
+                handleEmptyCart ={ handleEmptyCart } 
               />
             </Route>
-			
-			 <Route exact path="/checkout">
-              <Checkout caart={cart}  />
+  
+            <Route exact path="/checkout">
+              <Checkout caart={cart} handleEmptyCart={ handleEmptyCart } />
             </Route>
   
           </Switch>
@@ -68,7 +124,6 @@ const App = () => {
          
       </div>
       </Router>
-    
     )
   }
 export default App;

@@ -73,7 +73,19 @@ public class Controller {
 	    		  
 	    return ResponseEntity.status(HttpStatus.OK).body(files);
 	  }
-	
+
+	  @GetMapping("/files/{id}")
+	  public ResponseEntity<byte[]> getFile(@PathVariable String id) {
+		  	Product fileDB = productServiceInf.getFile(id);
+
+	    return ResponseEntity.ok()
+	        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDB.getName() + "\"")
+	        .body(fileDB.getData());
+	  } 
+	  
+	  
+	  /////////////////////////////////////////////////////////
+	  
 	  @GetMapping("/Fullcart")
 	  public  ResponseEntity<ResponseCart> getfullCart() {
 		 
@@ -99,5 +111,46 @@ public class Controller {
 		  
 		  return null;  
 	  }
-	 
+	  
+	  
+	  
+	  
+	  @GetMapping("/updatecart")
+	  public  ResponseEntity<ResponseCart> updateCart(@RequestParam("x") String cid,@RequestParam("y") int quantity)
+	  {
+		 
+		  cartServiceInf.updatecart(cid, quantity);
+		  
+		  ResponseCart responsecart = cartServiceInf.getCart();
+		 
+		 return ResponseEntity.status(HttpStatus.OK).body(responsecart);
+		    
+	  } 
+	  
+	  
+	  @GetMapping("/removeitem")
+	  public  ResponseEntity<ResponseCart> removeitem(@RequestParam("x") String cid)
+	  {
+		 
+		  cartServiceInf.removeitem(cid);
+		  
+		  ResponseCart responsecart = cartServiceInf.getCart();
+		 
+		 return ResponseEntity.status(HttpStatus.OK).body(responsecart);
+		    
+	  } 
+	  
+	  
+	  @GetMapping("/deleteall")
+	  public  ResponseEntity<ResponseCart> deleteall()
+	  {
+		 
+		  cartServiceInf.deleteall();
+		  
+		  ResponseCart responsecart = cartServiceInf.getCart();
+		 
+		 return ResponseEntity.status(HttpStatus.OK).body(responsecart);
+		    
+	  } 
+	  
 	}

@@ -8,13 +8,27 @@ import PaymentForm from '../PaymentForm';
 
 const steps = ['Shipping address', 'Payment details'];
 
-const Checkout = ({ caart }) => {
+const Checkout = ({ caart, handleEmptyCart }) => {
   const [activeStep, setActiveStep] = useState(0);
   const [checkoutToken, setCheckoutToken] = useState(null);
   const [shippingData, setShippingData] = useState({});
     const classes = useStyles();
     
+// useEffect(() => {
+   
+//     const generateToken = async () => {
+//       try {
+//         const token = await commerce.checkout.generateToken(cart.id, { type: 'cart' });
+//         console.log(token);
+//         setCheckoutToken(token);
 
+//       } catch (error) {
+        
+//       }
+//     }
+//       generateToken();
+
+// },[cart]);
   
   const nextStep = () => setActiveStep((prevActiveStep) => prevActiveStep + 1);
   const backStep = () => setActiveStep((prevActiveStep) => prevActiveStep-1);
@@ -44,7 +58,7 @@ const Checkout = ({ caart }) => {
           
         </div>
         <br />
-        <Button component={Link} variant="outlined" type="button" to="/"  >Continue Shopping</Button>
+        <Button component={Link} variant="outlined" type="button" to="/" onClick={handleEmptyCart} >Continue Shopping</Button>
       </>
     );
   

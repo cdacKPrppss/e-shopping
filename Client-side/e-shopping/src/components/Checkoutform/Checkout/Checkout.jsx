@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CssBaseline, Paper, Stepper, Step, StepLabel, Typography, CircularProgress, Divider, Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 import useStyles from './styles';
 import AddressForm from '../AddressForm';
@@ -8,51 +9,72 @@ import PaymentForm from '../PaymentForm';
 
 const steps = ['Shipping address', 'Payment details'];
 
-const Checkout = ({ caart, handleEmptyCart }) => {
+const Checkout = ({ caart, userDetails, handleEmptyCart }) => {
   const [activeStep, setActiveStep] = useState(0);
-  const [checkoutToken, setCheckoutToken] = useState(null);
+  // const [checkoutToken, setCheckoutToken] = useState(null);
   const [shippingData, setShippingData] = useState({});
+  const [orderId, setOrderId] = useState('');
+
     const classes = useStyles();
     
-// useEffect(() => {
+useEffect(() => {
    
-//     const generateToken = async () => {
-//       try {
-//         const token = await commerce.checkout.generateToken(cart.id, { type: 'cart' });
-//         console.log(token);
-//         setCheckoutToken(token);
+  setShippingData(shippingData);
+  // console.log(shippingData, userDetails, caart);
+  // console.log(userDetails);
 
-//       } catch (error) {
-        
-//       }
-//     }
-//       generateToken();
+}, [shippingData]);
+  
+useEffect(() => {
+   
+  setOrderId(orderId);
 
-// },[cart]);
+},[orderId]);
+  
   
   const nextStep = () => setActiveStep((prevActiveStep) => prevActiveStep + 1);
   const backStep = () => setActiveStep((prevActiveStep) => prevActiveStep-1);
 
   const next = (data) => {
+    // console.log(data);
     setShippingData(data);
     nextStep();
+    // console.log(shippingData);
   }
   
+  const sendOrderData = () => {
+    
+    // console.log(shippingData, userDetails, caart);
+
+    let orderdata = {
+      "address":shippingData,
+      "cartitems": caart.cart,
+      "userid":userDetails.email
+    }
+    
+    // console.log(orderdata);
+
+    const API_URL = "http://localhost:7777/saveorderdata";
+
+        axios.post(API_URL,  orderdata)
+          .then(response => {
+            // console.log(response.data)
+            setOrderId(response.data);
+          })
+
+    nextStep();
+
+  }
+
+
     const Confirmation = () => (
       <>
         <div>
-          <Typography variant="h5">Thank you for your purchase firstname  lastname!</Typography>
+          <Typography variant="h5">Thank you for your purchase {userDetails.username}!</Typography>
           <Divider className={classes.divider} />
-          <Typography variant="subtitle2">Order ref: 3453335</Typography>
-          <Typography variant="h5">Modifications required: 
-            <br /> 1. login(Auth) // optional
-            <br /> 2. orderid/token generation
-            <br /> 3. transfer shipping data and order data to server side
-            
-            <br /> 4. tables for login, (shipping data and order data) related to orderid
-            <br /> 6. use post method in axios
-            <br /> 7. use context for passing props
-            <br /> 8. payment transaction remove stripekey
+          <Typography variant="h6">Order Id: {orderId}</Typography>
+          <Typography variant="subtitle2">Please note your Order Id for further reference.
+           
 
           </Typography>
           
@@ -66,7 +88,7 @@ const Checkout = ({ caart, handleEmptyCart }) => {
     const Form = () => activeStep === 0
       ? <AddressForm  next={next} />
       : <PaymentForm shippingData={shippingData} caart={caart}
-          backStep={backStep} nextStep={nextStep}  />
+          backStep={backStep} sendOrderData={sendOrderData} />
     
   
   

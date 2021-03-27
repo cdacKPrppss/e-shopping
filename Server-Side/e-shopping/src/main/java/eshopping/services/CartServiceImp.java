@@ -28,7 +28,9 @@ public class CartServiceImp implements CartServiceInf{
 //		return cartRepository.findAll();
 //	}
 	
-	
+	public void addToCart(Cart cart) {
+		cartRepository.save(cart);
+	}
 	
 	public ResponseCart getCart() {
 		
@@ -78,7 +80,25 @@ public class CartServiceImp implements CartServiceInf{
 
 	
 	
+	public void updatecart(String cid, int quantity) {
+		
+			Cart item = cartRepository.findById(cid).get();
+			item.setQuantity(quantity);
+			cartRepository.save(item);
+	}
+
 	
+	public void removeitem(String cid) 
+	{	
+		cartRepository.deleteById(cid);	
+	}
+
+	
+	public void deleteall() 
+	{
+		cartRepository.deleteAll();
+	}
+
 	public boolean addtocart(String cid, int quantity)
 	{
 		if(cartRepository.existsById(cid))

@@ -8,7 +8,7 @@ import Review from './Review';
 const stripePromise = loadStripe('process.env.REACT_APP_STRIPE_PUBLIC_KEY');
 
 
-const PaymentForm = ({caart, shippingData, backStep, nextStep}) => {
+const PaymentForm = ({caart, backStep, sendOrderData}) => {
     return (
         <>
             <Review caart ={ caart } />
@@ -16,7 +16,7 @@ const PaymentForm = ({caart, shippingData, backStep, nextStep}) => {
             <Typography variant="h6" gutterBottom style={{ margin: '20px 0' }}>Payment method</Typography>
             <Elements stripe={stripePromise}>
                 <ElementsConsumer>{({ elements, stripe }) => (
-                <form onSubmit={nextStep }>
+                <form onSubmit={sendOrderData}>
                     <CardElement />
                     <br /> <br />
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>

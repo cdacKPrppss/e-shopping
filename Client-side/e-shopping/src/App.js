@@ -4,11 +4,13 @@ import axios from 'axios';
 
 import './App.css';
 import { NavBar, Products, Cart, Checkout } from './components';
-
+import SignIn from './components/Auth/SignIn.js';
+import SignUp from './components/Auth/SignUp.js';
 
 const App = () => {
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState([]);
+  const [userDetails, setUserDetails] = useState([]);
 
   const getProducts = async () => {
     axios.get('http://localhost:7777/files')
@@ -26,32 +28,7 @@ const App = () => {
       })
   }
   
-      
-    // for post axios request and handle errors
-  //   handleSubmit = event => {
-  //     event.preventDefault();
   
-  //     let notification = JSON.stringify({
-  //         token: this.state.token,
-  //         title: this.state.title,
-  //         body: this.state.body
-  //     })
-  
-  //     let headers = {
-  //         headers: {
-  //             'Accept': 'application/json',
-  //             'Content-Type': 'application/json'
-  //         }
-  
-  //     }
-  //     axios.post(`http://127.0.0.1:8000/send_push_message/`, notification)
-  //     .then(res => {
-  //         console.log(res);
-  //         console.log(res.data)
-  //     })
-  //     .catch(error => console.log(error));
-  
-  // }
 
     const handleAddToCart = (productId, quantity) => { 
 
@@ -89,13 +66,20 @@ const App = () => {
     })
   };
   
+
+
   useEffect(() => {
     getProducts();
     getCart();
 
   }, []);
 
-  
+  useEffect(() => {
+    setUserDetails(userDetails);
+
+  }, [userDetails]);
+
+
     return (
        <Router>
        <div >
@@ -116,14 +100,25 @@ const App = () => {
             </Route>
   
             <Route exact path="/checkout">
-              <Checkout caart={cart} handleEmptyCart={ handleEmptyCart } />
+              <Checkout caart={cart} handleEmptyCart={handleEmptyCart} userDetails = {userDetails} />
             </Route>
   
+             <Route exact path="/signin">
+              <SignIn setUserDetails={setUserDetails} />
+             </Route>
+              
+              <Route exact path="/signup">
+                     <SignUp />
+              </Route>
+
+
           </Switch>
          
-         
+
+          
       </div>
       </Router>
+    
     )
   }
 export default App;

@@ -17,14 +17,16 @@ const Product = ({ product, onAddToCart }) => {
             <Typography gutterBottom variant="h5" component="h2">
               {product.name}
             </Typography>
-            <Typography gutterBottom variant="h5" component="h2">
-              {product.price}
-            </Typography>
+           
           </div>
           <Typography dangerouslySetInnerHTML={{ __html: product.type }} variant="body2" color="textSecondary" component="p" />
           
         </CardContent>
+        
         <CardActions disableSpacing className={classes.cardActions}>
+        <Typography gutterBottom variant="body2" component="p">
+           {product.price} ₹
+            </Typography>
           <IconButton aria-label="Add to Cart" onClick={() => onAddToCart(product.id, 1)}>
             <AddShoppingCart />
           </IconButton>
